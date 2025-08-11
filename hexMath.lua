@@ -1,6 +1,8 @@
 local hexMath = {}
 
 --Note: offset functions works properly only with grid system which has even rows and pointy top hexes
+hexMath.origin = {x = 0, y = 0}
+hexMath.size = 32
 
 hexMath.axialNeighbors = {
         ['East'] = {q = 1, r = 0},
@@ -128,44 +130,46 @@ hexMath.hexagonGridAxial = function(centerQ, centerR, range) -- centerQ and cent
     return grid
 end
 
-hexMath.pixelToHexOffset = function(x, y, hexSide) --return offset grid position
-    local q, r = hexMath.pixelToAxialHex(x, y, hexSide)
+hexMath.pixelToHexOffset = function(x, y) --return offset grid position
+    local q, r = hexMath.pixelToAxialHex(x, y)
     return hexMath.axialToOffset(q, r)
 end
 
+hexMath.pixelToAxialHex = function(px, py)
+    local sx = px - hexMath.origin.x
+    local sy = py - hexMath.origin.y
+    local x = sx/hexMath.size
+    local y = sy/hexMath.size
+    local q = math.sqrt(3)/3 * x - 1/3*y
+    local r = 2/3*y
+    return hexMath.cubeRound(q, r, -q-r)
+end
 
-hexMath.axialHexToPixel = function(q, r, hexSide) -- return center of the Hex in pixels
+
+hexMath.axialHexToPixel = function(q, r) -- return center of the Hex in pixels
     local x = math.sqrt(3)*q + math.sqrt(3)/2*r
     local y = 3/2*r
-    x = x*hexSide
-    y = y*hexSide
+    x = x*hexMath.size + hexMath.origin.x
+    y = y*hexMath.size + hexMath.origin.y
     return x, y
 end
 
-hexMath.offsetHexToPixel = function(col, row, hexSide)
+hexMath.offsetHexToPixel = function(col, row)
     local q, r = hexMath.offsetToAxial(col, row)
-    return hexMath.axialHexToPixel(q, r, hexSide)
+    return hexMath.axialHexToPixel(q, r, hexMath.size)
 end
 
-hexMath.hexCoords = function(cx, cy, hexSide) --cx cy center of the hex in pixels
+hexMath.hexCoords = function(cx, cy) --cx cy center of the hex in pixels
     --cx, cy - of the center
     local coordinates = {}
     for i=0, 5, 1 do
         local rotation = math.rad(-60*i+30)
-        local x = cx + hexSide*math.cos(rotation)
-        local y = cy + hexSide*math.sin(rotation)
+        local x = cx + hexMath.size*math.cos(rotation)
+        local y = cy + hexMath.size*math.sin(rotation)
         table.insert(coordinates, x)
         table.insert(coordinates, y)
     end
     return coordinates --returns table with coordinates
-end
-
-hexMath.pixelToAxialHex = function(px, py, hexSide)
-    local x = px/hexSide
-    local y = py/hexSide
-    local q = math.sqrt(3)/3 * x - 1/3*y
-    local r = 2/3*y
-    return hexMath.cubeRound(q, r, -q-r)
 end
 
 hexMath.cubeRound = function(cq, cr, cs)
@@ -206,12 +210,12 @@ hexMath.axialHexLine = function(startHex, finishHex) --returns hex.q, hex.r of h
     return result
 end
 
-hexMath.axialPointLine = function(startHex, finishHex, hexSide) -- returns x, y of points used to draw line
+hexMath.axialPointLine = function(startHex, finishHex) -- returns x, y of points used to draw line
     local n = hexMath.axialDistance(startHex, finishHex)
     local lineTable = {}
     for i = 0, n do
         local qf, rf = hexMath.axialLerp(startHex, finishHex, i / n)
-        local x, y = hexMath.axialHexToPixel(qf, rf, hexSide)
+        local x, y = hexMath.axialHexToPixel(qf, rf, hexMath.size)
         table.insert(lineTable, x)
         table.insert(lineTable, y)
     end
