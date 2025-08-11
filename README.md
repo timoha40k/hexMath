@@ -1,7 +1,14 @@
 # hexMath
 ## Note: offset coordinate system works properly only with grid systems which has even rows shoved to the right and pointy top hexagons.
 Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as they have inspired me to create this library. Most of the math in this library is adapted from their [Hexagonal grid reference](https://www.redblobgames.com/grids/hexagons/).
-# Getting Started
+* [Getting Started](#getting-started)
+  * [Basic Grid](#basic-grid)
+  * [Getting Coordinates](#getting-coordinates)
+  * [Drawing line through the center of hexes](#drawing-line-through-the-center-of-hexes)
+  * [Drawing line with points](#drawing-line-with-points)
+* [API Reference](#api-reference)
+  * [Coordinate Conversions](#coordinate-conversions)
+## Getting Started
 Download the hexMath.lua file and add it to your project
 ```lua
 hexMath = require('hexMath')
@@ -50,7 +57,7 @@ for i, hex in ipairs(line) do
 end
 ```
 ![20250811-1447-52 5068616](https://github.com/user-attachments/assets/96e7630a-26c2-4cc4-9b8c-35cad4476de0)
-### Drawing Line with points
+### Drawing line with points
 
 ```lua
 local lineTable = hexMath.axialPointLine({q = 0, r= 0}, {q=mq,r=mr})
@@ -60,5 +67,20 @@ love.graphics.points(lineTable)
 ```
 ![20250811-1452-17 3034069](https://github.com/user-attachments/assets/1117339e-f0cc-4f81-a2c6-4c677a83c1e6)
 
-## Full functionality is on the wiki
+## API Reference
+### Coordinate Conversions
+#### `hexMath.offsetToAxial(col, row)`
+- Converts offset coordinates `(col, row)` to axial coordinates `(q, r)`.
+
+#### `hexMath.axialToOffset(q, r)`
+- Converts offset coordinates `(q, r)` to axial coordinates `(col, row)`.
+
+#### hexMath.axialToCube(hex)
+- Takes table with q and r keys `{q = q, r =r }`. Returns 3 numbers `q, r, s`.
+#### hexMath.cubeToAxial(q, r, s)
+- Converts cubic coordinates `q, r, s` to axial cooridnates `q, r`.
+
+### Distance
+#### `hexMath.offsetDistance(x1, y1, x2, y2)`
+- Returns distance between two points in offset coordinate system
 
