@@ -25,7 +25,7 @@ function love.draw()
     end
 end
 ```
-![Example grid](preview/obraz.png)
+![Example grid](preview/ExampleGrid.png)
 ### Coordinates tracing
 ```lua
 local mx, my = love.mouse.getPosition
