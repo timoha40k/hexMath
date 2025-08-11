@@ -26,7 +26,7 @@ function love.draw()
 end
 ```
 ![Example grid](preview/ExampleGrid.png)
-### Coordinates tracing
+### Getting Coordinates
 ```lua
 local mx, my = love.mouse.getPosition
 local x, y = hexMath.pixelToHexOffset(mx, my, hexSide)
@@ -34,3 +34,4 @@ love.graphics.print("X:"..x..' Y:'..y, 0, 0)
 local mq, mr = hexMath.pixelToAxialHex(mx, my, hexSide)
 love.graphics.print("q:"..mq..' r:'..mr,0, 10)
 ```
+![Coordinates](preview/coordinates.gif)
