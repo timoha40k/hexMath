@@ -1,6 +1,6 @@
 # hexMath
 ## Note: offset coordinate system works properly only with grid systems which has even rows shoved to the right and pointy top hexagons.
-Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as they have inspired me to create this library. Most of the math in this library is adapted from their [Hexagonal grid reference](https://www.redblobgames.com/grids/hexagons/).
+Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as their work has inspired me to create this library. Most of the math in this library is adapted from their [Hexagonal grid reference](https://www.redblobgames.com/grids/hexagons/).
 * [Getting Started](#getting-started)
   * [Basic Grid](#basic-grid)
   * [Getting Coordinates](#getting-coordinates)
@@ -9,7 +9,9 @@ Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as they have inspir
 * [API Reference](#api-reference)
   * [Properties](#properties)
   * [Coordinate Conversions](#coordinate-conversions)
-## Getting Started
+ 
+*Getting Started*
+-
 Download the hexMath.lua file and add it to your project
 ```lua
 hexMath = require('hexMath')
@@ -68,8 +70,16 @@ love.graphics.points(lineTable)
 ```
 ![20250811-1452-17 3034069](https://github.com/user-attachments/assets/1117339e-f0cc-4f81-a2c6-4c677a83c1e6)
 
-## API Reference
-### Properties
+*API Reference*
+-
+This library fully supports two coordinate systems **Offset** (with even `rows` or `y` shoved to the right) and **Axial** for indexing individual hexagons (tiles) in an hexagonal grid.\
+As **Offset** is more familiar because it can be indexed by `columns` `(x)` going to the right and `rows` `(y)` goint to the bottom similar so Cartesian coordinate system, 
+**Axial** coordinate is based on whole another coordinate system called **Cubic** system. **Axial** system allows us to work with grid logic _like finding neighbors and distance_, it's equivalent to columns being `q` axis works similar to `x` axis of cartesian coordinate system,
+it's row equivalent axis `r` is place "diagonally" from `-q` to `+q`.\
+For more in-depth and visual explanation ypu should check out this [guide](https://www.redblobgames.com/grids/hexagons/#coordinates) by Red Blob Games.
+
+Properties
+-
 #### `hexMath.origin`
 A table containing starting coordinates (in pixels) of grid system.
 * Fields:
@@ -101,7 +111,28 @@ A lookup table of neighbor directions and their corresponding axial vector.
 Note:\
 This table is used internally by functions like [`getAxialNeighbor`](#hexmathgetaxialneigborhex-vec), so
 you don't need to worry about it _unless you want_ to redefine directions to suit your grid
-### Coordinate Conversions
+
+Hexagon building
+-
+#### `hexMath.hexCoords(x, y)`
+Takes `(x, y)` coordinates and builds `coords` table with coordinates of 6 hexagon corners. `(x, y)` being center of this hexagon \
+Note: to build hexagon with your desired size, you need to define `hexMath.size`
+- Arguments:
+   * number `x`
+   * number `y`
+- Returns:
+   * table `points`
+- Example:
+```lua
+hexMath.size = 48 --distance from the center to corner of a hexagon
+local coords = hexMath.hexCoord(100, 100)
+love.graphics.polygon('line', coords)
+-- Draws polygon with center at (100, 100)
+```
+  
+Coordinate Conversions
+-
+
 #### `hexMath.offsetToAxial(col, row)`
 Converts offset coordinates `(col, row)` to axial coordinates `(q, r)`
 - Arguments:
@@ -131,11 +162,69 @@ Takes table with q and r keys `{q = q, r =r }`. Returns cubic coordinates `(q, r
 #### `hexMath.cubeToAxial(q, r, s)`
 - Converts cubic coordinates `q, r, s` to axial cooridnates `q, r`.
 
-### Grid Building
-
-#### hexMath.hexagonGridAxial(q, r, radius)
-
-### Distance
+Grid Building
+-
+#### hexMath.hexagonGridAxial(q, r, size)
+Returns table with hexagonal grid, that uses axial coordinates, structured like `grid[row][col] = {}`
+- Arguments:
+   * number `q` - "column" index of the center of the grid in axial coordinate system.
+   * number `r` - "row" index of the center of the grid in axial coordinate system.
+   * number `size` - distance from the center `(q, r)` to border of the grid.
+ - Returns:
+    * table `grid` - which contains:
+       - table indexed by __row:__ `-size <= row <= +size` - each table contains:
+           - table indexed but __col:__ `-size <= col <= +size`
+ #### hexMath.hexagonGridOffset(col, row, size)
+ Returns table with hexagonal grid, that uses offset coordinates, structured like `grid[row][col] = {}`
+ - Argumants:
+    * number `col` - column index of the center of the grid in offset coordinate system.
+    * number `row` - column index of the center of the grid in offset coordinate system.
+    * number `size` - distance from the center `(col, row)` to border of the grid.
+  - Returns:
+    * table `grid` - which contains:
+       - table indexed by __row:__ `-size <= row <= +size` - each table contains:
+           - table indexed but __col:__ `-size <= col <= +size`
+        
+Hex To Pixel
+-
+#### `hexMath.axialHexToPixel(q, r)`
+Converts axial `(q, r)` coordinates to screen coordinates `(x, y)` of the center of the corresponding hex.
+- Arguments :
+   * number `q`
+   * number `r`
+ - Returns:
+    * number `x`
+    * number `y`
+#### `hexMath.offsetHexToPixel(col, row)`
+Converts offset `(col, row)` coordinates to screen coordinates `(x, y)` of the center of the corresponding hex.
+- Arguments :
+   * number `col`
+   * number `row`
+ - Returns:
+    * number `x`
+    * number `y`
+  
+Pixel To Hex
+-
+#### `hexMath.pixelToAxialHex(x, y)`
+Converts give screen coordinates `(x, y)` to axial coordinates `(q, r)` 
+- Arguments :
+   * number `x`
+   * number `y`
+ - Returns:
+    * number `q`
+    * number `r`
+#### `hexMath.pixelToOffsetHex(x, y)`
+Converts give screen coordinates `(x, y)` to offset coordinates `(col, row)` 
+- Arguments :
+   * number `x`
+   * number `y`
+ - Returns:
+    * number `col`
+    * number `row`
+  
+Distance
+-
 #### `hexMath.offsetDistance(x1, y1, x2, y2)`
 Calculates distance between two hexes in offset coordinate system.
 - Arguments:
@@ -161,7 +250,8 @@ Calculates distance between two hexes in axial coordinate system.
 local axialDistance = hexMath.axialDistance({q = 0, r = 0}, {q = 5, r =3}
 print(axialDistance)
 ```
-### Neighbors
+Neighbors
+-
 #### `hexMath.getAxialNeigbor(hex, vec)`
 - Arguments:
   * table `hex` - must contain:
@@ -183,4 +273,27 @@ local x, y = hexMath.axialHexToPixel(hexRight.q, hexRight.r)
 local coords = hexMath.hexCoords(x,y)
 love.graphics.polygon('line', coords) --draws hexagon to the right
 ```
+Grid Border
+-
+#### `hexMath.getAxialGridBorder(grid)`
+Takes grid (structured like `grid[row][col] = {}`), that uses axial coordinates and returns table `borderHexes` with its border hexes. Can also be used for polygonal shaped grids.
+- Arguments:
+  * table `grid` - must contain:
+      * table `row` - must contains:
+         * table `col` _or_ numbers `col`
+- Returns:
+  * table `borderHexes` a list of border hexes, where each entry is a table containing:
+     * table `{q = col, r = row}` - the axial coordinates of the hex.
+     * (other tables with axial hex coordinates)...
+- Example:
+```lua
+hexGrid = hexMath.hexagonGridAxial(0, 0 , 5)
+local gridOutline = hexMath.getAxialGridBorder(hexGrid)
+for _, hex in pairs(gridOutline) do
+   local x, y = hexMath.offsetHexToPixel(hex.q, hex.r)
+   local coords = hexMath.hexCoords(x, y)
+   love.graphics.polygon('line', coords)
+end
+```
+<img width="198" height="170" alt="ExampleBorder" src="https://github.com/user-attachments/assets/b3282402-09ce-434f-86eb-219c665aa5c5" />
 
