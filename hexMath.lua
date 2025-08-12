@@ -62,7 +62,7 @@ hexMath.axial_add = function(hex, vec)
     return Hex
 end
 
-hexMath.getAxialNeighbor = function(hex, vec) -- hex = {q, r} direction = string (East, NorthEast etc from axialNeighbors)
+hexMath.getAxialNeighbor = function(hex, vec) -- hex = {q, r}, vec = {q, r}
     return hexMath.axial_add(hex, vec)
 end
 
