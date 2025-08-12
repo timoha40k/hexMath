@@ -100,7 +100,7 @@ A lookup table of neighbor directions and their corresponding axial vector.
 ```
 Note:\
 This table is used internally by functions like [`getAxialNeighbor`](#hexmathgetaxialneigborhex-vec), so
-you don't need to modify it _unless you want_ to redefine directions to suit your grid
+you don't need to worry about it _unless you want_ to redefine directions to suit your grid
 ### Coordinate Conversions
 #### `hexMath.offsetToAxial(col, row)`
 Converts offset coordinates `(col, row)` to axial coordinates `(q, r)`
@@ -131,6 +131,10 @@ Takes table with q and r keys `{q = q, r =r }`. Returns cubic coordinates `(q, r
 #### `hexMath.cubeToAxial(q, r, s)`
 - Converts cubic coordinates `q, r, s` to axial cooridnates `q, r`.
 
+### Grid Building
+
+#### hexMath.hexagonGridAxial(q, r, radius)
+
 ### Distance
 #### `hexMath.offsetDistance(x1, y1, x2, y2)`
 Calculates distance between two hexes in offset coordinate system.
@@ -159,5 +163,24 @@ print(axialDistance)
 ```
 ### Neighbors
 #### `hexMath.getAxialNeigbor(hex, vec)`
-
+- Arguments:
+  * table `hex` - must contain:
+     * key `q` - number
+     * key `r` - number
+  * table `vec` - must contain:
+     * key `q` - number
+     * key `r` - number
+- Returns:
+   * table `hex` - that contains:
+      * key `q` - number
+      * key `r` - number
+- Example find neighbors to the right and bottom-left of given hex:
+```lua
+Hex = {q = 0, r = 0}
+hexRight = hexMath.getAxialNeighbor(Hex, hexMath.axialNeighbors['East'])
+hexBottomLeft = hexMath.getAxialNeighbor(Hex, hexMath.axialNeighbors['SouthWest'])
+local x, y = hexMath.axialHexToPixel(hexRight.q, hexRight.r)
+local coords = hexMath.hexCoords(x,y)
+love.graphics.polygon('line', coords) --draws hexagon to the right
+```
 
