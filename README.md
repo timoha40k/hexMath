@@ -49,7 +49,7 @@ love.graphics.print("q:"..mq..' r:'..mr,0, 10)
 ### Drawing line through the center of hexes
 ```lua
 local mx, my = love.mouse.getPosition()
-local mq, mr = hexMath.pixelToAxialHex(mx, my
+local mq, mr = hexMath.pixelToAxialHex(mx, my)
 local line = hexMath.axialHexLine({q = 0, r= 0}, {q=mq,r=mr})
 for i, hex in ipairs(line) do
     if line[i+1] then
@@ -253,6 +253,7 @@ print(axialDistance)
 Neighbors
 -
 #### `hexMath.getAxialNeigbor(hex, vec)`
+Gets table with axial coordinates `{q, r}` of the neighboring hex in a given direction vector.
 - Arguments:
   * table `hex` - must contain:
      * key `q` - number
@@ -297,3 +298,45 @@ end
 ```
 <img width="198" height="170" alt="ExampleBorder" src="https://github.com/user-attachments/assets/b3282402-09ce-434f-86eb-219c665aa5c5" />
 
+#### `hexMath.getOffsetGridBorder(grid)`
+Takes grid (structured like `grid[row][col] = {}`), that uses offset coordinates and returns table `borderHexes` with its border hexes. Can also be used for polygonal shaped grids.
+- Arguments:
+  * table `grid` - must contain:
+      * table `row` - must contains:
+         * table `col` _or_ numbers `col`
+- Returns:
+  * table `borderHexes` a list of border hexes, where each entry is a table containing:
+     * table `{x = col, y = row}` - the axial coordinates of the hex.
+     * (other tables with axial hex coordinates)...
+   
+Lines
+-
+#### `hexMath.axialHexLine(startHex, finishHex)`
+- Arguments:
+  * table `startHex` - must contain:
+    * key `q` - number
+    * key `r` - number
+  * table `finishHex` - must contain:
+    * key `q` - number
+    * key `r` - number
+- Returns:
+   * table `hexLine` an array of hexes along the line where each element is:
+      * table `{q = col, r = row}` - the axial coordinates of the hex.
+      * (other tables with axial hex coordinates)...
+
+#### `hexMath.axialPointLine(startHex, finishHex)`
+Returns table with coordinates of the points along the line.
+- Arguments:
+   * table `startHex` - must contain:
+    * key `q` - number
+    * key `r` - number
+  * table `finishHex` - must contain:
+    * key `q` - number
+    * key `r` - number
+ - Returns:
+   * table `lineTable` that contains:
+      * number `x1` - x coordinate of first point.
+      * number `y1` - y coordinate of first point.
+      * number `x2` - x coordinate of second point.
+      * number `y2` - y coordinate of second point.
+      * number ...
