@@ -31,7 +31,7 @@ hexMath.axialToCube = function(hex)
     local q = hex.q
     local r = hex.r
     local s = -hex.q-hex.r
-    return{q,r,s}
+    return q, r, s
 end
 
 hexMath.cubeToAxial = function(q, r, s)
@@ -62,8 +62,8 @@ hexMath.axial_add = function(hex, vec)
     return Hex
 end
 
-hexMath.getAxialNeighbor = function(hex, direction) -- hex = {q, r} direction = string (East, NorthEast etc from axialNeighbors)
-    return hexMath.axial_add(hex, hexMath.axialNeighbors[direction])
+hexMath.getAxialNeighbor = function(hex, vec) -- hex = {q, r} direction = string (East, NorthEast etc from axialNeighbors)
+    return hexMath.axial_add(hex, vec)
 end
 
 hexMath.getAxialGridBorder = function(grid)
@@ -71,7 +71,7 @@ hexMath.getAxialGridBorder = function(grid)
     for row, cols in pairs(grid) do
         for col in pairs(cols) do
             for direction in pairs(hexMath.axialNeighbors) do
-                local neighborHex = hexMath.getAxialNeighbor({q = col, r = row}, direction)
+                local neighborHex = hexMath.getAxialNeighbor({q = col, r = row}, hexMath.axialNeighbors[direction])
                 if grid[neighborHex.r] and grid[neighborHex.r][neighborHex.q] then
                 else
                     table.insert(outlineHexes, {q = col, r = row})
@@ -88,7 +88,7 @@ hexMath.getOffsetGridBorder = function(grid)
         for col in pairs(cols) do
             local q, r = hexMath.offsetToAxial(col, row)
             for direction in pairs(hexMath.axialNeighbors) do
-                local neighborHex = hexMath.getAxialNeighbor({q = q, r = r}, direction)
+                local neighborHex = hexMath.getAxialNeighbor({q = q, r = r}, hexMath.axialNeighbors[direction])
                 local neighborOffsetX, neighborOffsetY = hexMath.axialToOffset(neighborHex.q, neighborHex.r)
                 if grid[neighborOffsetY] and grid[neighborOffsetY][neighborOffsetX] then
                 else
