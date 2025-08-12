@@ -99,8 +99,8 @@ A lookup table of neighbor directions and their corresponding axial vector.
 }
 ```
 Note:\
-This table is used internally by functions like [`getAxialNeighbot`](#hexmath.getaxialheigbor(hex-vec))
-You don't need to worry about it _unless you want_ to redefine directions to suit your grid
+This table is used internally by functions like [`getAxialNeighbor`](#hexmathgetaxialneigborhex-vec), so
+you don't need to modify it _unless you want_ to redefine directions to suit your grid
 ### Coordinate Conversions
 #### `hexMath.offsetToAxial(col, row)`
 Converts offset coordinates `(col, row)` to axial coordinates `(q, r)`
