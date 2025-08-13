@@ -15,6 +15,8 @@ Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as their work has i
   * [Pixel To Hex](#pixel-to-hex)
   * [Distance](#distance)
   * [Neighbors](#neighbors)
+  * [Grid Border](#grid-border)
+  * [Lines](#lines)
  
 *Getting Started*
 -
