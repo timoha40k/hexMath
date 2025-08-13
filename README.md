@@ -8,7 +8,13 @@ Huge thanks to [RedBlobGames](https://www.redblobgames.com/) as their work has i
   * [Drawing line with points](#drawing-line-with-points)
 * [API Reference](#api-reference)
   * [Properties](#properties)
+  * [Hexagon Building](#hexagon-building)
   * [Coordinate Conversions](#coordinate-conversions)
+  * [Grid Building](#grid-building)
+  * [Hex To Pixel](#hex-to-pixel)
+  * [Pixel To Hex](#pixel-to-hex)
+  * [Distance](#distance)
+  * [Neighbors](#neighbors)
  
 *Getting Started*
 -
