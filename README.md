@@ -31,7 +31,7 @@ function love.load()
     hexMath.size = 32 --size being radius of outer circle touching the corners.
     --In other words - size is distance between center of the hexagon to its' corners
     hexMath.origin = {x = love.graphics.getWidth()/2, y = love.graphics.getHeight()/2} --origin is starting coordinates in pixels
-    hexGrid = hexMath.hexagonGridAxial(0, 0 , 5) --returns tablewith grid[row][col] = {}
+    hexGrid = hexMath.hexagonGridAxial(0, 0 , 5) --returns table with grid[row][col] = {}
 end
 
 function love.draw()
@@ -80,10 +80,10 @@ love.graphics.points(lineTable)
 
 *API Reference*
 -
-This library fully supports two coordinate systems **Offset** (with even `rows` or `y` shoved to the right) and **Axial** for indexing individual hexagons (tiles) in an hexagonal grid.\
-As **Offset** is more familiar because it can be indexed by `columns` `(x)` going to the right and `rows` `(y)` goint to the bottom similar so Cartesian coordinate system, 
-**Axial** coordinate is based on whole another coordinate system called **Cubic** system. **Axial** system allows us to work with grid logic _like finding neighbors and distance_, it's equivalent to columns being `q` axis works similar to `x` axis of cartesian coordinate system,
-it's row equivalent axis `r` is place "diagonally" from `-q` to `+q`.\
+This library fully supports two coordinate systems **Offset** (with even `rows` or `y` shoved to the right) and **Axial** for indexing individual hexagons (tiles) in a hexagonal grid.\
+As **Offset** is more familiar because it can be indexed by `columns` `(x)` going from left to right and `rows` `(y)` goint from top to bottom similar to Cartesian coordinate system, 
+**Axial** coordinate is based on whole another coordinate system called **Cubic** system. **Axial** system allows us to work with grid logic _like finding neighbors and distance_, it's equivalent to columns being `q` axis works similar to `x` axis of cartesian coordinate system. However,
+it's row equivalent axis `r` is placed "diagonally" from `-q` to `+q`.\
 For more in-depth and visual explanation ypu should check out this [guide](https://www.redblobgames.com/grids/hexagons/#coordinates) by Red Blob Games.
 
 Properties
